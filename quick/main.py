@@ -187,8 +187,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 if __name__ == "__main__":
     import uvicorn
-    # Cloud Run 및 컨테이너 환경의 PORT 환경 변수 지원 (기본 8080)
-    port = int(os.environ.get("PORT", 8080))
-    print(f"Starting server on http://0.0.0.0:{port}")
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    # Cloud Run 컨테이너 환경의 PORT 환경 변수 감지 (기본값 8080)
+    port = int(os.environ.get("PORT", "8080"))
+    print(f"[Cloud Run] Starting FastAPI server on 0.0.0.0:{port}", flush=True)
+    # 프로덕션에서는 reload=False로 구동하여 프로세스 분기 및 컨테이너 충돌 방지
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
