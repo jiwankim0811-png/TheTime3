@@ -16,6 +16,12 @@ import os
 import sys
 import time
 from typing import List, Optional
+
+# 현재 파일 디렉토리를 sys.path 최상단에 등록하여 컨테이너 실행 환경에서 모듈 임포트 실패 방지
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if CURRENT_DIR not in sys.path:
+    sys.path.insert(0, CURRENT_DIR)
+
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -185,5 +191,4 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     print(f"Starting server on http://0.0.0.0:{port}")
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
-
 
