@@ -116,5 +116,9 @@ def execute_sort(request: SortRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    # Cloud Run 컨테이너 환경의 PORT 환경 변수 감지 (기본값 8080)
+    port = int(os.environ.get("PORT", "8080"))
+    print(f"[Cloud Run] Starting FastAPI server on 0.0.0.0:{port}", flush=True)
+    # 프로덕션 컨테이너에서는 reload=False로 구동하여 충돌 방지
+    uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")
 
